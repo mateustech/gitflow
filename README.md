@@ -6,7 +6,7 @@ Repositório com passo-a-passo de como gerar um CHANGELOG automaticamente.
 ### 1) Instale as dependências
 
 ```sh
-npm install --save-dev husky @commitlint/cli @commitlint/config-conventional standard-version
+npm install --save-dev husky @commitlint/cli @commitlint/config-conventional standard-version cz-conventional-changelog
 ```
 
 ### 2) Crie o arquivo `commitlint.config.js`
@@ -63,7 +63,13 @@ getNextVersion(packageJson.version)
   },
   "scripts": {
     "release": "standard-version"
-  }
+  },
+   "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  ...,
 }
 ```
 
