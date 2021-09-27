@@ -1,29 +1,15 @@
-# changelog-cicd
-![Status Badge do Gerador de CHANGELOG](https://github.com/klauskpm/changelog-cicd/workflows/Gerador%20de%20CHANGELOG/badge.svg)
-
+# SemVer + GitFlow + CommitLint
 Repositório com passo-a-passo de como gerar um CHANGELOG automaticamente.
-
-Esse passo-a-passo é a versão muito resumida do artigo: [Como gerar CHANGELOG automaticamente]()
 
 ## Gerando um CHANGELOG automaticamente
 
 ### 1) Instale as dependências
 
 ```sh
-npm install --global commitizen
-
-# dentro do seu projeto
-npm install --save-dev husky @commitlint/cli @commitlint/config-conventional standard-version
+npm install --save-dev husky @commitlint/cli @commitlint/config-conventional standard-version cz-conventional-changelog
 ```
 
-### 2) Configure o commitizen
-
-```sh
-# dentro do seu projeto
-commitizen init cz-conventional-changelog --save-dev --save-exact
-```
-
-### 3) Crie o arquivo `commitlint.config.js`
+### 2) Crie o arquivo `commitlint.config.js`
 
 ```js
 module.exports = {
@@ -31,24 +17,59 @@ module.exports = {
 };
 ```
 
+### 3) Crie o arquivo `get-next-version.js`
+
+```js
+const packageJson = require('./package.json')
+const conventionalRecommendedBump = require('conventional-recommended-bump')
+const semver = require('semver')
+
+const getNextVersion = currentVersion => {
+  return new Promise((resolve, reject) => {
+    conventionalRecommendedBump(
+      {
+        preset: 'angular',
+      },
+      (err, release) => {
+        if (err) {
+          reject(err)
+          return
+        }
+
+        const nextVersion =
+          semver.valid(release.releaseType) ||
+          semver.inc(currentVersion, release.releaseType)
+
+        resolve(nextVersion)
+      }
+    )
+  })
+}
+
+getNextVersion(packageJson.version)
+  .then(version => console.log(version))
+  .catch(error => console.log(error))
+```
 ### 4) Altere o seu `package.json`
 
 ```json
 {
   ...,
-  // opcional
-  "repository": {
-    "url": "git@gitlab.com:meu-usuario/meu-repo.git"
-  },
-  ...,
   "husky": {
     "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "get-next-version": "node ./get-next-version.js"
     }
   },
   "scripts": {
     "release": "standard-version"
-  }
+  },
+   "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  ...,
 }
 ```
 
@@ -75,7 +96,7 @@ module.exports = {
 Caso queira, pode criar uma release com a versão atual do projeto, antes de adicionar um processo de automatização.
 
 ```sh
-npm run release -- --first-release
+npm run release
 ```
 
 ### 6) Crie o `.github/workflows/gerador-de-changelog.yml`
