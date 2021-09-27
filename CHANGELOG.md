@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://github.com/klauskpm/changelog-cicd/compare/v2.1.3...v2.2.0) (2021-09-27)
+
+
+### Errors Corrigidos
+
+* resolve conflits ([6d88c74](https://github.com/klauskpm/changelog-cicd/commit/6d88c745cd705198472d8ed57d4ea46e3501f539))
+
+
+### Funcionalidades
+
+* add script get next version ([2e3255d](https://github.com/klauskpm/changelog-cicd/commit/2e3255d2b28e2d57fbfd8700dd9b5863ba4aa91e))
+* create component button ([c49d907](https://github.com/klauskpm/changelog-cicd/commit/c49d907d131c6eeba2fef9f87fa2c3de1317eabd))
+
 ### [2.1.3](https://github.com/klauskpm/changelog-cicd/compare/v2.1.2...v2.1.3) (2020-01-14)
 
 ### [2.1.2](https://github.com/klauskpm/changelog-cicd/compare/v2.1.1...v2.1.2) (2020-01-13)
